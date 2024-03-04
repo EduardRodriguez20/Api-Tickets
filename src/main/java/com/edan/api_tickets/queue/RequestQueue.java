@@ -9,10 +9,10 @@ public class RequestQueue extends Thread{
     @Getter
     private static final RequestQueue instance = new RequestQueue();
     private final Queue<Request> queue;
+
     private RequestQueue() {
         queue = new LinkedList<>();
     }
-
     public synchronized void addQueue(Request request) {
         queue.add(request);
     }

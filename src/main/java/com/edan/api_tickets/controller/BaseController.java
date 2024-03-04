@@ -10,5 +10,5 @@ public interface BaseController<T> {
     ResponseEntity<T> getById(Integer id);
     ResponseEntity<Answer> create(T entity);
 //    ResponseEntity<T> update(Long id, T entity);
-    ResponseEntity<Answer> delete(Long id);
+    ResponseEntity<Answer> delete(Integer id);
 }

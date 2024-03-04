@@ -32,8 +32,10 @@ public class Sell {
     @Column(name = "date")
     private String date;
 
-    public Sell(Integer id_ticket) {
+    public Sell(Integer id_ticket, Integer id_reseller, Long document_user) {
         this.id_ticket = id_ticket;
+        this.id_reseller = id_reseller;
+        this.document_user = document_user;
         this.date = Formats.formatDate(LocalDateTime.now());
     }
 

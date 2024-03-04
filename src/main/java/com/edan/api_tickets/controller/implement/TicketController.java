@@ -1,11 +1,16 @@
 package com.edan.api_tickets.controller.implement;
 
+import com.edan.api_tickets.controller.BaseController;
 import com.edan.api_tickets.repository.TicketRepository;
+import com.edan.api_tickets.repository.entities.Answer;
 import com.edan.api_tickets.repository.entities.Ticket;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -19,18 +24,16 @@ public class TicketController {
         return ticketRepository.findAll();
     }
 
-    @PostMapping("/tickets/create")
-    public Ticket createTicket(Ticket ticket) {
-        return ticketRepository.save(ticket);
+    @GetMapping("/tickets/{id}")
+    public ResponseEntity<Ticket> getTicketById(@PathVariable Integer id) {
+        Optional<Ticket> ticket = ticketRepository.findById(id);
+        return ticket.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @GetMapping("/tickets/search/{id}")
-    public Ticket getTicketById(@PathVariable Integer id) {
-        return ticketRepository.findById(id).orElse(null);
+    @GetMapping("/tickets/search/{cod_ticket}")
+    public ResponseEntity<Ticket> getTicketByCodTicket(@PathVariable String cod_ticket) {
+        Optional<Ticket> ticket = ticketRepository.searchByCodTicket(cod_ticket);
+        return ticket.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @DeleteMapping("/tickets/delete/{id}")
-    public void deleteTicket(@PathVariable Integer id) {
-        ticketRepository.deleteById(id);
-    }
 }
