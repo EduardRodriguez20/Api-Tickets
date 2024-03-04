@@ -30,9 +30,9 @@ public class TicketController {
         return ticket.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @GetMapping("/tickets/search/{cod_ticket}")
-    public ResponseEntity<Ticket> getTicketByCodTicket(@PathVariable String cod_ticket) {
-        Optional<Ticket> ticket = ticketRepository.searchByCodTicket(cod_ticket);
+    @GetMapping("/tickets/search/{codTicket}")
+    public ResponseEntity<Ticket> getTicketByCodTicket(@PathVariable String codTicket) {
+        Optional<Ticket> ticket = ticketRepository.searchByCodTicket(codTicket);
         return ticket.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 

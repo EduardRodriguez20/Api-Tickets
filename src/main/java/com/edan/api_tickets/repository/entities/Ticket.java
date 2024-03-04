@@ -18,10 +18,10 @@ public class Ticket {
     private Integer id;
 
     @Column(name = "id_event")
-    private Integer id_event;
+    private Integer idEvent;
 
     @Column(name = "cod_ticket")
-    private String cod_ticket;
+    private String codTicket;
 
     @Column(name = "price")
     private Double price;

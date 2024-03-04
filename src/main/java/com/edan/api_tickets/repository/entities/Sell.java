@@ -21,21 +21,21 @@ public class Sell {
     private Integer id;
 
     @Column(name = "id_ticket")
-    private Integer id_ticket;
+    private Integer idTicket;
 
     @Column(name = "id_reseller")
-    private Integer id_reseller;
+    private Integer idReseller;
 
     @Column(name = "document_user")
-    private Long document_user;
+    private Long documentUser;
 
     @Column(name = "date")
     private String date;
 
     public Sell(Integer id_ticket, Integer id_reseller, Long document_user) {
-        this.id_ticket = id_ticket;
-        this.id_reseller = id_reseller;
-        this.document_user = document_user;
+        this.idTicket = id_ticket;
+        this.idReseller = id_reseller;
+        this.documentUser = document_user;
         this.date = Formats.formatDate(LocalDateTime.now());
     }
 

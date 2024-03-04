@@ -7,8 +7,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class ApiTicketsApplication {
 
 	public static void main(String[] args) {
-//		RequestProcessor requestProcessor = new RequestProcessor();
-//		requestProcessor.start();
 		SpringApplication.run(ApiTicketsApplication.class, args);
 	}
 

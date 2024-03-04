@@ -1,75 +1,59 @@
 package com.edan.api_tickets.controller.implement;
 
-import com.edan.api_tickets.queue.Request;
-import com.edan.api_tickets.queue.RequestQueue;
+import com.edan.api_tickets.controller.BaseController;
 import com.edan.api_tickets.repository.SellRepository;
-import com.edan.api_tickets.repository.TicketRepository;
+import com.edan.api_tickets.repository.entities.Answer;
 import com.edan.api_tickets.repository.entities.Sell;
+import com.edan.api_tickets.service.SellService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1")
-public class SellController {
+public class SellController implements BaseController<Sell> {
     @Autowired
     private SellRepository sellRepository;
-    @Autowired
-    private TicketRepository ticketRepository;
 
-    public SellController(){
-        Thread thread = new Thread(this::process);
-        thread.start();
-    }
-    private Queue<Runnable> queueSell = new ConcurrentLinkedQueue<>();
-    private void addQueue(Runnable runnable) {
-        queueSell.offer(runnable);
-    }
-    private void process(){
-        while(true){
-            Runnable runnable = queueSell.poll();
-            if(runnable!= null){
-                runnable.run();
-            }
-            try{
-                Thread.sleep(2000);
-            }catch (InterruptedException e){
-                e.printStackTrace();
-            }
-        }
-    }
-
-
+    @Override
     @GetMapping("/sells")
-    public List<Sell> getAllSells() {
-//        addQueue(() ->{
-//            List<Sell> all = sellRepository.findAll();
-//            return all;
-//        });
-        return sellRepository.findAll();
+    public ResponseEntity<List<Sell>> getAll() {
+        List<Sell> sells = sellRepository.findAll();
+        if (!sells.isEmpty()) {
+            return new ResponseEntity<>(sells, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @Override
+    @GetMapping("/sells/{id}")
+    public ResponseEntity<Sell> getById(Integer id) {
+        Optional<Sell> sell = sellRepository.findById(id);
+        return sell.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    @Override
     @PostMapping("/sells/create")
-    public Sell createSell(Sell sell) {
-        return sellRepository.save(sell);
+    public ResponseEntity<Answer> create(Sell entity) {
+        if (SellService.ticketSold(sellRepository, entity)){
+            sellRepository.save(entity);
+            return new ResponseEntity<>(new Answer("success", "Ticket sold"), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(new Answer("error", "Ticket already sold"), HttpStatus.CONFLICT);
     }
 
-//    @PatchMapping("/sells/edit/{id}")
-//    public Sell editSell(@PathVariable Integer id, @RequestBody Sell sell) {
-//        return sellRepository.save(sell);
-//    }
-
-    @GetMapping("/sells/search/{id}")
-    public Sell getSellById(@PathVariable Integer id) {
-        return sellRepository.findById(id).orElse(null);
-    }
-
+    @Override
     @DeleteMapping("/sells/delete/{id}")
-    public void deleteSell(@PathVariable Integer id) {
-        sellRepository.deleteById(id);
+    public ResponseEntity<Answer> delete(Integer id) {
+        Optional<Sell> sell = sellRepository.findById(id);
+        if (sell.isPresent()) {
+            sellRepository.delete(sell.get());
+            return new ResponseEntity<>(new Answer("success", "Ticket deleted"), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(new Answer("error", "Ticket not found"), HttpStatus.NOT_FOUND);
     }
-
 }
