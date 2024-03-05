@@ -66,8 +66,4 @@ public class ResellerController implements BaseController<Reseller>, BaseControl
     public static ResponseEntity<Answer> xdd(){
         return new ResponseEntity<>(new Answer("success", "xdd"), HttpStatus.OK);
     }
-
-    public void xd(){
-        ResponseEntity<Answer> xdd = xdd();
-    }
 }
