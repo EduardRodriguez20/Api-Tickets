@@ -32,14 +32,14 @@ public class SellerController implements BaseController<Seller>, BaseControllerD
 
     @Override
     @GetMapping("/sellers/{id}")
-    public ResponseEntity<Seller> getById(Integer id) {
+    public ResponseEntity<Seller> getById(@PathVariable Integer id) {
         Optional<Seller> seller = sellerRepository.findById(id);
         return seller.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @Override
     @GetMapping("/sellers/search/{document}")
-    public ResponseEntity<Seller> getByDocument(Long document) {
+    public ResponseEntity<Seller> getByDocument(@PathVariable Long document) {
         Optional<Seller> seller = sellerRepository.findByDocument(document);
         return seller.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }

@@ -1,8 +1,6 @@
 package com.edan.api_tickets.controller.implement;
 
-import com.edan.api_tickets.controller.BaseController;
 import com.edan.api_tickets.repository.TicketRepository;
-import com.edan.api_tickets.repository.entities.Answer;
 import com.edan.api_tickets.repository.entities.Ticket;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
